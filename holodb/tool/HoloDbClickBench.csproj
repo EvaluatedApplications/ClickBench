@@ -5,9 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);HOLODB_MULTIBLOCK</DefineConstants>
+    <SelfContained>false</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('Linux'))">linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="$([MSBuild]::IsOSPlatform('Windows'))">win-x64</RuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EvaluatedApplications.HoloDb" Version="17.1.1" />
+    <PackageReference Include="EvaluatedApplications.HoloDb" Version="18.1.4" />
     <PackageReference Include="DuckDB.NET.Data.Full" Version="1.5.5" />
   </ItemGroup>
 </Project>
