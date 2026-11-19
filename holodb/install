@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+# HoloDb is an embedded .NET library. This installs the .NET 8 SDK and builds the small ClickBench tool in ./tool
+# (loader and single-query CLI) against the public EvaluatedApplications.HoloDb NuGet package.
+if ! command -v dotnet >/dev/null 2>&1; then
+    sudo apt-get update -y
+    sudo apt-get install -y dotnet-sdk-8.0
+fi
+dotnet publish tool/HoloDbClickBench.csproj -c Release -o bin

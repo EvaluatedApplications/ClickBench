@@ -1,0 +1,3 @@
+#!/bin/bash
+# embedded: no daemon
+exit 0

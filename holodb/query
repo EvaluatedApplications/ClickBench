@@ -1,0 +1,8 @@
+#!/bin/bash
+# Reads a SQL query from stdin, runs it with HoloDb against holodb-data.
+# Stdout: query result. Stderr: query runtime in fractional seconds on the last line. Exit non-zero on error.
+set -e
+q=$(mktemp)
+cat > "$q"
+dotnet bin/HoloDbClickBench.dll query holodb-data "$q"
+rm -f "$q"

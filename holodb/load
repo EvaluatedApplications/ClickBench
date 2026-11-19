@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+# Idempotent: blow away a prior database. The tool reads the official parquet file (DuckDB's reader inside the tool, then HoloDb's bulk load), with the official conversions.
+rm -rf holodb-data
+dotnet bin/HoloDbClickBench.dll load holodb-data hits.parquet create.sql
+rm -f hits.parquet
+sync
