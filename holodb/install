@@ -6,4 +6,5 @@ if ! command -v dotnet >/dev/null 2>&1; then
     sudo apt-get update -y
     sudo apt-get install -y dotnet-sdk-8.0
 fi
-dotnet publish tool/HoloDbClickBench.csproj -c Release -o bin
+# ReadyToRun needs the crossgen packs from nuget.org; if they cannot be restored, publish without it.
+dotnet publish tool/HoloDbClickBench.csproj -c Release -o bin || dotnet publish tool/HoloDbClickBench.csproj -c Release -o bin -p:PublishReadyToRun=false
