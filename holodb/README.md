@@ -5,7 +5,7 @@ HoloDb is an embedded, commercially licensed .NET database: typed columns, exact
 HoloDb is commercial software. Its licensor permits running ClickBench against it and publishing the results.
 
 ## How it runs
-- `install` installs the .NET 8 SDK and builds `tool/` (loader and single-query CLI, about 300 lines of C#) against the public `EvaluatedApplications.HoloDb` NuGet package, version 18.1.4.
+- `install` installs the .NET 8 SDK and builds `tool/` (loader and single-query CLI, about 300 lines of C#) against the public `EvaluatedApplications.HoloDb` NuGet package, version 18.1.7.
 - `load` reads the official `hits.parquet` and applies the official conversions (`make_date` / `epoch_ms` on the four time columns), then bulk-loads it into one table. The parquet is read with DuckDB's reader inside the loader. The table is the official `create.sql`, unchanged, with no primary key.
 - `query` is a new process per run. Its reported time covers `Database.Open`, `Database.Execute` and rendering the result rows; the .NET runtime start-up before `Main` is not included. The driver's `SELECT 1` start-up probe has no FROM clause, which the engine does not parse, so the tool answers a bare integer constant itself after opening the database; no benchmark query takes this path.
 - `queries.sql` and `create.sql` are the official DuckDB ones, byte for byte.
