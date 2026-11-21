@@ -25,8 +25,14 @@ internal static class Runner
     public static int Run(string dir, string sqlFile)
     {
         string sql = File.ReadAllText(sqlFile).Trim();
+#if HOLODB_DIALECT
+        sql = sql.Replace("STRLEN(", "OCTET_LENGTH(");   // official text says STRLEN, which DuckDB defines as the byte length; the standard spelling is OCTET_LENGTH
+#endif
         var sw = Stopwatch.StartNew();
         var db = Database.Open(Path.Combine(dir, "holo"), 8L * 1024 * 1024, paged: true);
+#if HOLODB_DIALECT
+        db.Dialect = SqlDialect.Extended;   // LIMIT, DATE_TRUNC and REGEXP_REPLACE are Extended; needs a HoloDb that has Database.Dialect (define HOLODB_DIALECT)
+#endif
         // The engine has no SELECT without FROM. The driver's startup probe is `SELECT 1`: the tool answers a bare
         // integer constant itself, after opening the database, so the probe still measures process start plus Open.
         var k = System.Text.RegularExpressions.Regex.Match(sql, @"^SELECT\s+(-?\d{1,18})\s*;?$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -248,6 +254,9 @@ internal static unsafe class Loader
         Directory.CreateDirectory(dir);
         var sw = Stopwatch.StartNew();
         var db = Database.Open(Path.Combine(dir, "holo"), 8L * 1024 * 1024, paged: true);
+#if HOLODB_DIALECT
+        db.Dialect = SqlDialect.Extended;   // LIMIT, DATE_TRUNC and REGEXP_REPLACE are Extended; needs a HoloDb that has Database.Dialect (define HOLODB_DIALECT)
+#endif
         db.Execute(create);
         var names = cols.Select(c => c.Name).ToArray();
         using var ds = new Source(parquet, cols);
