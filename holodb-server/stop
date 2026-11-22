@@ -1,0 +1,15 @@
+#!/bin/bash
+# Graceful stop: docker stop sends SIGTERM, the server shuts down and closes the database (clean-close stamp), and the
+# container is removed. Returns once the container is gone.
+cd "$(dirname "$0")"
+. ./bench.env
+
+if sudo docker inspect "$HOLODB_CONTAINER" >/dev/null 2>&1; then
+    sudo docker stop -t 120 "$HOLODB_CONTAINER" >/dev/null 2>&1 || true
+    sudo docker rm -f "$HOLODB_CONTAINER" >/dev/null 2>&1 || true
+fi
+for _ in $(seq 1 600); do
+    sudo docker inspect "$HOLODB_CONTAINER" >/dev/null 2>&1 || break
+    sleep 0.1
+done
+exit 0

@@ -1,0 +1,13 @@
+{
+  "system": "HoloDb (server)",
+  "proprietary": "yes",
+  "hardware": "cpu",
+  "tuned": "no",
+  "category": "enthusiast",
+  "tags": [
+    "C#",
+    ".NET",
+    "column-oriented",
+    "server"
+  ]
+}
